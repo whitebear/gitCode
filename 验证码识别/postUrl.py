@@ -3,6 +3,9 @@ import urllib
 import urllib2
 import cookielib
 import imagecrack
+import PyV8
+import sys
+
 
 def setupUA(req=None):
     req.add_header('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36')
@@ -145,11 +148,35 @@ def test():
     for c in cookie:
        print c
 
+def testJsFile():
+    ctxt = PyV8.JSContext()
+    try:
+        ctxt.enter()
+        fileObj = open('prototype_for_validation.js')
+        text = fileObj.read()
+        ff = ctxt.eval(text)
+        
+        #fileObj = open('validatation_cn.js')
+        #text = fileObj.read()
+        #ff = ctxt.eval(text)
+        
+        #print  ff
+    finally:
+        fileObj.close()
        
 def main():
-    doLogin()
+    stdout = sys.stdout
+    stdin = sys.stdin
+    stderr = sys.stderr
+    reload(sys)
+    sys.stdout = stdout
+    sys.stdin = stdin
+    sys.stderr = stderr
     
+    sys.setdefaultencoding('utf-8')
+      
+    #doLogin()
+    testJsFile()
 
-
-    
-main()
+if __name__ == '__main__':
+    main()
